@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xmlns:db="http://docbook.org/ns/docbook" xmlns="http://docbook.org/ns/docbook" xml:id="Hadoop_Ecosystem-d1e1240" version="5.0" xml:base="intro.xml">
+<title>Hadoop Ecosystem</title>
+
+<section xml:id="Hadoop-d1e1241">
+<title>What Is Apache Hadoop?</title>
+<para>The Apache Hadoop software library is a framework that allows for the distributed processing of large data sets across clusters of computers using simple programming models. It is designed to scale up from single servers to thousands of machines, each offering local computation and storage. Rather than rely on hardware to deliver high-availability, the library itself is designed to detect and handle failures at the application layer, so delivering a highly-available service on top of a cluster of computers, each of which may be prone to failures.</para>
+</section>
+
+<section xml:id="Hadoop_Ecosystem-d1e1242">
+<title>Understanding Hadoop Ecosystem</title>
+<para>The Apache Hadoop consists of two key components: reliable, distributed file system called Hadoop Distributed File System (HDFS) and the high-performance parallel data processing engine called Apache YARN. The most important aspect of Hadoop is that ability to move computation to the data rather than moving data to computation. Thus HDFS and MapReduce are tightly integrated.</para>
+<section xml:id="HDFS-d1e1243">
+	<title>What Is HDFS?</title>
+	<para>HDFS is distributed file system that provides high-throughput access to data.HDFS creates multiple replicas(default : 3) of each data block across the hadoop cluster to enable reliable and rapid access to the data.</para>
+	<para>The Main Daemons of HDFS are listed Below.</para>
+	<itemizedlist mark='opencircle'>
+	<listitem>
+	<para>
+	<command>NameNode</command> is the master of the system. It oversees and coordinates data storage (directories and files).
+	</para>
+	</listitem>
+	<listitem >
+	<para>
+	<command>DataNodes</command> are the actual slaves which are deployed in all slave machines provides actual storage to HDFS. It oversees and coordinates reads and writes requests from client.
+	</para>
+	</listitem>
+	<listitem>
+	<para>
+	<command>Secondary NameNode</command> is responsible for performing periodic checkpoints. In the event of NameNode failure, you can restart the NameNode using the checkpoint. But its <emphasis>not a Backup Node </emphasis> for Name node.
+	</para>
+	</listitem>
+	</itemizedlist>
+</section>
+
+<section xml:id="YARN-d1e1244">
+	<title>Apache Hadoop NextGen MapReduce (YARN)</title>
+	<para>Yet Another Resource Negotiator (YARN) is 2nd generation MapReduce (MR) which splits up the two major responsibilities of the MapReduce - JobTracker i.e. resource management and job scheduling/monitoring, into separate daemons: a global ResourceManager and per-application ApplicationMaster (AM).</para>
+	<para>The Main Daemons of YARN are listed Below.</para>
+	<itemizedlist mark='opencircle'>
+	<listitem>
+	<para>
+	The <command>ResourceManager</command> has two main components: Scheduler and ApplicationsManager.The <emphasis>Scheduler </emphasis>is responsible for allocating resources to the various running applications subject to familiar constraints of capacities, queues etc. The <emphasis>ApplicationsManager</emphasis> is responsible for accepting job-submissions, negotiating the first container for executing the application specific ApplicationMaster and provides the service for restarting the ApplicationMaster container on failure.
+	</para>
+	</listitem>
+	<listitem>
+	<para>
+	The <command>NodeManager</command> is the per-machine framework agent who is responsible for containers, monitoring their resource usage (cpu, memory, disk, network) and reporting the same to the ResourceManager/Scheduler.
+	</para>
+	</listitem>
+	<listitem>
+	<para>
+	<command>JobHistoryServer</command> is a daemon that serves historical information about completed applications. Typically, JobHistory server can be co-deployed with Job­Tracker, but we recommend running JobHistory server as a separate daemon.
+	</para>
+	</listitem>
+	</itemizedlist>
+</section>
+
+<table xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg" xmlns:html="http://www.w3.org/1999/xhtml" frame="all">
+<title>Hadoop Modules</title>
+<tgroup cols="4">
+<thead>
+<row>
+<entry>Module</entry>
+<entry>Description</entry>
+<entry>Version</entry>
+<entry>Installation Guide</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>Apache HDFS</entry>
+<entry>A distributed file system that provides high-throughput access to application data.</entry>
+<entry>2.5.1</entry>
+<entry>
+	Pseudo-Distributed
+	Fully-Distributed
+</entry>
+</row>
+<row>
+<entry>Apache YARN</entry>
+<entry>A framework for job scheduling and cluster resource management.</entry>
+<entry>2.5.1</entry>
+<entry>
+	Pseudo-Distributed
+	Fully-Distributed
+</entry>
+</row>
+<row>
+<entry>Hadoop MapReduce</entry>
+<entry>A YARN-based system for parallel processing of large data sets.</entry>
+<entry>2.5.1</entry>
+<entry>
+	Pseudo-Distributed
+	Fully-Distributed
+</entry>
+</row>
+<row>
+<entry>Apache HBase</entry>
+<entry>A scalable, distributed database that supports structured data storage for large tables.</entry>
+<entry></entry>
+<entry>Single Node</entry>
+</row>
+<row>
+<entry>Apache Hive</entry>
+<entry>A data warehouse infrastructure that provides data summarization and ad hoc querying.</entry>
+<entry></entry>
+<entry>Single Node</entry>
+</row>
+<row>
+<entry>Apache Pig</entry>
+<entry> A high-level data-flow language and execution framework for parallel computation.</entry>
+<entry></entry>
+<entry>Single Node</entry>
+</row>
+<row>
+<entry>Apache Sqoop</entry>
+<entry>Apache Sqoop is a tool designed for efficiently transferring bulk data between Apache Hadoop and structured datastores such as relational databases.</entry>
+<entry></entry>
+<entry>Single Node</entry>
+</row>
+<row>
+<entry>Apache Spark</entry>
+<entry>A fast and general compute engine for Hadoop data. Spark provides a simple and expressive programming model that supports a wide range of applications, including ETL, machine learning, stream processing, and graph computation.</entry>
+<entry></entry>
+<entry>Single Node</entry>
+</row>
+<row>
+<entry>Apache Zookeper</entry>
+<entry>A high-performance coordination service for distributed applications.</entry>
+<entry></entry>
+<entry>Single Node</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+</section>
+</chapter>

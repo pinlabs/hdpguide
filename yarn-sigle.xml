@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xmlns:db="http://docbook.org/ns/docbook" xmlns="http://docbook.org/ns/docbook" xml:id="Yarn_Single-d1e1250" version="5.0" xml:base="Yarn_Single.xml">
+<title>Apache YARN Pseudo-Distributed Mode</title>
+
+<section xml:id="Yarn_Single-d1e1251">
+<title>Supported Modes</title>
+<para>Apache Hadoop cluster can be installed in one of the three supported modes </para>
+	<itemizedlist mark='opencircle'>
+	<listitem>
+	<para>
+	<command>Local (Standalone) Mode</command> -  Hadoop is configured to run in a non-distributed mode, as a single Java process. This is useful for debugging.
+	</para>
+	</listitem>
+	<listitem >
+	<para>
+	<command>Pseudo-Distributed Mode</command> - pseudo-distributed mode where each Hadoop daemon runs in a separate Java process.
+	</para>
+	</listitem>
+	<listitem>
+	<para>
+	<command>Fully-Distributed Mode</command> - Master, Slave cluster setup where daemons runs on seperate machines.
+	</para>
+	</listitem>
+	</itemizedlist>
+
+<section xml:id="Requirments-d1e1252">
+	<title>Requirements for Pseudo-Distributed Mode</title>
+	<itemizedlist>	
+	<listitem>
+	<para>
+	Ubuntu Server 14.04
+	</para>
+	</listitem>
+	<listitem >
+	<para>
+	Jdk 1.7
+	</para>
+	</listitem>
+	<listitem>
+	<para>
+	Apache Hadoop-2.5.1 Package 
+	</para>
+	</listitem>
+	<listitem>
+	<para>
+	ssh-server
+	</para>
+	</listitem>	
+	</itemizedlist>	
+</section>
+
+<section xml:id="installation-d1e1253">
+	<title>Installation Notes</title>
+	<section xml:id="tools-d1e12531">
+		<title>Get some tools</title>
+		<para>Before begin with installation let us update the Ubuntu packages with latest contents and get some tools for edition</para>
+		<programlisting>
+		sudo apt-get update
+		sudo apt-get install vim
+		cd
+		</programlisting>	
+	</section>	
+	<section xml:id="jdk-d1e12532">
+		<title>Install Jdk 1.7</title>
+		<para>For Running Apache hadoop java jdk1.7 is required. Install open-jdk1.7 or oracle jdk1.7 on your ubuntu machine, for installing open-jdk-1.7 read this and for oracle jdk1.7 read this.</para>	
+		<section xml:id="open-jdk-d1e12533">
+		<title>Installing open-Jdk 1.7</title>
+		<para>For installing open-jdk 1.7 follow these steps</para>
+		<programlisting>
+		sudo apt-get install openjdk-7-jdk
+		vim .bashrc
+		</programlisting>	
+		<para>Add this line at end of .bashrc file</para>
+		<programlisting>
+		export JAVA_HOME=/usr
+		export PATH=$PATH:$HOME/bin:$JAVA_HOME/bin
+		</programlisting>
+		<para>Esc -> :wq for save and quit from vim editor</para>
+		<programlisting>
+		source .bashrc
+		java -version
+		</programlisting>	
+		</section>	
+		<section xml:id="oracle-jdk-d1e12534">
+		<title>Installing oracle-Jdk 1.7</title>
+		<para>For installing oracle-jdk 1.7 follow these steps</para>
+		<programlisting>
+		wget https://dl.dropboxusercontent.com/u/24798834/Hadoop/jdk-7u51-linux-x64.tar.gz
+		tar xzf jdk-7u51-linux-x64.tar.gz
+		sudo mv jdk1.7.0_51 /opt/
+		vim .bashrc
+		</programlisting>	
+		<para>Add this line at end of .bashrc file</para>
+		<programlisting>
+		export JAVA_HOME=/opt/jdk1.7.0_51
+		export PATH=$PATH:$HOME/bin:$JAVA_HOME/bin
+		</programlisting>
+		<para>Esc -> :wq for save and quit from vim editor</para>
+		<programlisting>
+		source .bashrc
+		java -version
+		</programlisting>	
+		<programlisting>
+			Console output :
+			
+			java version "1.7.0_51"
+			Java(TM) SE Runtime Environment (build 1.7.0_51-b13)
+			Java HotSpot(TM) 64-Bit Server VM (build 24.51-b03, mixed mode)
+		</programlisting>
+		</section>	
+	</section>		
+</section>
+
+</section>
+</chapter>
