@@ -102,13 +102,57 @@
 		</programlisting>	
 		<programlisting>
 			Console output :
-			
+
 			java version "1.7.0_51"
 			Java(TM) SE Runtime Environment (build 1.7.0_51-b13)
 			Java HotSpot(TM) 64-Bit Server VM (build 24.51-b03, mixed mode)
 		</programlisting>
 		</section>	
-	</section>		
+	</section>	
+	<section xml:id="ssh-d1e12535">
+		<title>Setup passphraseless ssh</title>
+		<para>Setup password less ssh access for hadoop daemon </para>
+		<programlisting>
+		sudo apt-get install ssh
+		ssh-keygen -t rsa -P ""
+		ssh-copy-id -i ~/.ssh/id_rsa.pub localhost
+		exit
+		</programlisting>	
+	</section>	
+	<section xml:id="hadoop-d1e12536">
+		<title>Setting Hadoop Package</title>
+		<para>Download and install hadoop 2.5.1 package on home dir of ubuntu. </para>
+		<programlisting>
+		wget http://apache.cs.utah.edu/hadoop/common/stable/hadoop-2.5.1.tar.gz
+		tar xzf hadoop-2.5.1.tar.gz
+		cd hadoop-2.5.1/etc/hadoop
+		</programlisting>
+		<para>
+		Ensure that JAVA_HOME is set in hadoop-env.sh and points to the Java installation you intend to use. You can set other environment variables in hadoop-env.sh to suit your requirments. Some of the default settings refer to the variable HADOOP_HOME. The value of HADOOP_HOME is automatically inferred from the location of the startup scripts. HADOOP_HOME is the parent directory of the bin directory that holds the Hadoop scripts. In this instance it is $HADOOP_INSTALL/hadoop			
+		</para>	
+		<para>Configure JAVA_HOME in <command>hadoop-env.sh</command> file by uncommenting the line <emphasis> export JAVA_HOME= </emphasis>and replace with below contents for open-jdk</para>
+		<programlisting>
+		export JAVA_HOME=/usr
+		</programlisting>		
+		<para>Configure JAVA_HOME in <command>hadoop-env.sh</command> file by uncommenting the line <emphasis> export JAVA_HOME= </emphasis>and replace with below contents for oracle-jdk</para>
+		<programlisting>
+		export JAVA_HOME=/opt/jdk1.7.0_51
+		</programlisting>			
+	</section>	
+
+	<section xml:id="core-site-d1e12537">
+		<title>Configuring core-site.xml</title>
+		<para>conf/core-site.xml:</para>
+		<programlisting language="xml">
+			<configuration>
+			 <property>
+			 <name>fs.default.name</name>
+			 <value>hdfs://localhost:9000</value>
+			 </property>
+			</configuration>
+		</programlisting>			
+	</section>	
+
 </section>
 
 </section>
