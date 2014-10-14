@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xmlns:db="http://docbook.org/ns/docbook" xmlns="http://docbook.org/ns/docbook" xml:id="Yarn_Single-d1e1250" version="5.0" xml:base="Yarn_Single.xml">
+<title>Apache YARN Pseudo-Distributed Mode</title>
+
+<section xml:id="Yarn_Single-d1e1251">
+<title>Supported Modes</title>
+<para>Apache Hadoop cluster can be installed in one of the three supported modes </para>
+	<itemizedlist mark='opencircle'>
+	<listitem>
+	<para>
+	<command>Local (Standalone) Mode</command> -  Hadoop is configured to run in a non-distributed mode, as a single Java process. This is useful for debugging.
+	</para>
+	</listitem>
+	<listitem >
+	<para>
+	<command>Pseudo-Distributed Mode</command> - pseudo-distributed mode where each Hadoop daemon runs in a separate Java process.
+	</para>
+	</listitem>
+	<listitem>
+	<para>
+	<command>Fully-Distributed Mode</command> - Master, Slave cluster setup where daemons runs on seperate machines.
+	</para>
+	</listitem>
+	</itemizedlist>
+</section>
+
+<section xml:id="Pseudo-Distributed-d1e12524">
+	<title>Pseudo-Distributed Mode</title>
+<section xml:id="Requirments-d1e1252">
+	<title>Requirements for Pseudo-Distributed Mode</title>
+	<itemizedlist>	
+	<listitem>
+	<para>
+	Ubuntu Server 14.04
+	</para>
+	</listitem>
+	<listitem >
+	<para>
+	Jdk 1.7
+	</para>
+	</listitem>
+	<listitem>
+	<para>
+	Apache Hadoop-2.5.1 Package 
+	</para>
+	</listitem>
+	<listitem>
+	<para>
+	ssh-server
+	</para>
+	</listitem>	
+	</itemizedlist>	
+</section>
+
+<section xml:id="installation-d1e1253">
+	<title>Installation Notes</title>
+	<section xml:id="tools-d1e12531">
+		<title>Get some tools</title>
+		<para>Before begin with installation let us update the Ubuntu packages with latest contents and get some tools for edition</para>
+		<programlisting>
+		sudo apt-get update
+		sudo apt-get install vim
+		cd
+		</programlisting>	
+	</section>	
+	<section xml:id="jdk-d1e12532">
+		<title>Install Jdk 1.7</title>
+		<para>For Running Apache hadoop java jdk1.7 is required. Install open-jdk1.7 or oracle jdk1.7 on your ubuntu machine, for installing open-jdk-1.7 read this and for oracle jdk1.7 read this.</para>	
+		<section xml:id="open-jdk-d1e12533">
+		<title>Installing open-Jdk 1.7</title>
+		<para>For installing open-jdk 1.7 follow these steps</para>
+		<programlisting>
+		sudo apt-get install openjdk-7-jdk
+		vim .bashrc
+		</programlisting>	
+		<para>Add this line at end of .bashrc file</para>
+		<programlisting>
+		export JAVA_HOME=/usr
+		export PATH=$PATH:$HOME/bin:$JAVA_HOME/bin
+		</programlisting>
+		<para>Esc -> :wq for save and quit from vim editor</para>
+		<programlisting>
+		source .bashrc
+		java -version
+		</programlisting>	
+		</section>	
+		<section xml:id="oracle-jdk-d1e12534">
+		<title>Installing oracle-Jdk 1.7</title>
+		<para>For installing oracle-jdk 1.7 follow these steps</para>
+		<programlisting>
+		wget https://dl.dropboxusercontent.com/u/24798834/Hadoop/jdk-7u51-linux-x64.tar.gz
+		tar xzf jdk-7u51-linux-x64.tar.gz
+		sudo mv jdk1.7.0_51 /opt/
+		vim .bashrc
+		</programlisting>	
+		<para>Add this line at end of .bashrc file</para>
+		<programlisting>
+		export JAVA_HOME=/opt/jdk1.7.0_51
+		export PATH=$PATH:$HOME/bin:$JAVA_HOME/bin
+		</programlisting>
+		<para>Esc -> :wq for save and quit from vim editor</para>
+		<programlisting>
+		source .bashrc
+		java -version
+		</programlisting>	
+		<programlisting>
+			Console output :
+
+			java version "1.7.0_51"
+			Java(TM) SE Runtime Environment (build 1.7.0_51-b13)
+			Java HotSpot(TM) 64-Bit Server VM (build 24.51-b03, mixed mode)
+		</programlisting>
+		</section>	
+	</section>	
+	<section xml:id="ssh-d1e12535">
+		<title>Setup passphraseless ssh</title>
+		<para>Setup password less ssh access for hadoop daemon </para>
+		<programlisting>
+		sudo apt-get install ssh
+		ssh-keygen -t rsa -P ""
+		ssh-copy-id -i ~/.ssh/id_rsa.pub localhost
+		exit
+		</programlisting>	
+	</section>	
+	<section xml:id="hadoop-d1e12536">
+		<title>Setting Hadoop Package</title>
+		<para>Download and install hadoop 2.5.1 package on home dir of ubuntu. </para>
+		<programlisting>
+		wget http://apache.cs.utah.edu/hadoop/common/stable/hadoop-2.5.1.tar.gz
+		tar xzf hadoop-2.5.1.tar.gz
+		cd hadoop-2.5.1/etc/hadoop
+		</programlisting>
+		<para>
+		Ensure that JAVA_HOME is set in hadoop-env.sh and points to the Java installation you intend to use. You can set other environment variables in hadoop-env.sh to suit your requirments. Some of the default settings refer to the variable HADOOP_HOME. The value of HADOOP_HOME is automatically inferred from the location of the startup scripts. HADOOP_HOME is the parent directory of the bin directory that holds the Hadoop scripts. In this instance it is $HADOOP_INSTALL/hadoop			
+		</para>	
+		<para>Configure JAVA_HOME in <command>hadoop-env.sh</command> file by uncommenting the line <emphasis> export JAVA_HOME= </emphasis>and replace with below contents for open-jdk</para>
+		<programlisting>
+		export JAVA_HOME=/usr
+		</programlisting>		
+		<para>Configure JAVA_HOME in <command>hadoop-env.sh</command> file by uncommenting the line <emphasis> export JAVA_HOME= </emphasis>and replace with below contents for oracle-jdk</para>
+		<programlisting>
+		export JAVA_HOME=/opt/jdk1.7.0_51
+		</programlisting>			
+	</section>	
+
+	<section xml:id="core-site-d1e12537">
+		<title>Configuring core-site.xml</title>
+		<para>etc/hadoop/core-site.xml:</para>
+		<para>Edit core-site.xml available in ($HADOOP_HOME/etc/hadoop/core-site.xml) with the contents below.</para>
+		<programlisting>
+			<![CDATA[
+			<?xml version="1.0" encoding="UTF-8"?>
+			<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+			<configuration>
+			 <property>
+			 <name>fs.default.name</name>
+			 <value>hdfs://localhost:9000</value>
+			 </property>
+			</configuration>
+			]]>
+		</programlisting>			
+	</section>	
+	<section xml:id="hdfs-site-d1e12538">
+		<title>Configuring hdfs-site.xml</title>
+		<para>etc/hadoop/hdfs-site.xml:</para>
+		<para>Edit hdfs-site.xml available in ($HADOOP_HOME/etc/hadoop/hdfs-site.xml) with the contents below.</para>
+		<programlisting>
+			<![CDATA[
+			<?xml version="1.0" encoding="UTF-8"?>
+			<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+			<configuration>
+			 <property>
+			   <name>dfs.replication</name>
+			   <value>1</value>
+			 </property>
+			 <property>
+			   <name>dfs.namenode.name.dir</name>
+			   <value>file:/home/ubuntu/yarn/yarn_data/hdfs/namenode</value>
+			 </property>
+			 <property>
+			   <name>dfs.datanode.data.dir</name>
+			   <value>file:/home/ubuntu/yarn/yarn_data/hdfs/datanode</value>
+			 </property>
+			</configuration>
+			]]>
+		</programlisting>	
+		<para>Where <emphasis> ubuntu </emphasis> is current user. <emphasis>dfs.replication</emphasis> represents the data replication factor (by default 3) since its single node it has be set as 1. <emphasis>dfs.namenode.name.dir</emphasis> attribute defines the local directory for storing the name node data. <emphasis>dfs.datanode.data.dir</emphasis> attribute defines the local directory for storing the data node data (ie. actual user data).</para>		
+	</section>	
+	<section xml:id="mapred-site-d1e12539">
+		<title>Configuring mapred-site.xml</title>
+		<para>etc/hadoop/mapred-site.xml:</para>
+		<para>Edit mapred-site.xml available in ($HADOOP_HOME/etc/hadoop/mapred-site.xml) with the contents below.</para>
+		<programlisting>
+			<![CDATA[
+			<?xml version="1.0" encoding="UTF-8"?>
+			<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+			<configuration>
+			 <property>
+			 <name>mapreduce.framework.name</name>
+			 <value>yarn</value>
+			 </property>
+			</configuration>
+			]]>
+		</programlisting>
+		<para>Where <emphasis> mapreduce.framework.name </emphasis> specifies the Mapreduce Version to be used MR1 or MR2(YARN).</para>		
+	</section>	
+	<section xml:id="yarn-site-d1e12540">
+		<title>Configuring yarn-site.xml</title>
+		<para>etc/hadoop/yarn-site.xml:</para>
+		<para>Edit yarn-site.xml available in ($HADOOP_HOME/etc/hadoop/yarn-site.xml) with the contents below.</para>
+		<programlisting>
+			<![CDATA[
+			<?xml version="1.0" encoding="UTF-8"?>
+			<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+			<configuration>
+			<property>
+			   <name>yarn.nodemanager.aux-services</name>
+			   <value>mapreduce_shuffle</value>
+			</property>
+			<property>
+			   <name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>
+			   <value>org.apache.hadoop.mapred.ShuffleHandler</value>
+			</property>
+			</configuration>
+			]]>
+		</programlisting>			
+	</section>	
+</section>
+	<section xml:id="Execution-d1e12541">
+		<title>Execution</title>
+		<para>Now all the configuration has be done next step is to formate the name node and to start the hadoop cluster. Frmate the name node using the below command available at $HADOOP_HOME directory.</para>
+		<programlisting>
+			bin/hadoop namenode -format
+		</programlisting>	
+		<section xml:id="Start-d1e12542">
+			<title>Start the hadoop cluster</title>
+			<para>Start the hadoop cluster with the below command available ad $HADOOP_HOME directory.</para>
+			<programlisting>
+				sbin/start-all.sh
+			</programlisting>
+		</section>	
+		<section xml:id="verify-d1e12543">
+			<title>Verify the hadoop cluster</title>
+			<para>After starting the hadoop cluster you can verify for the 5 hadoop daemons using the java profiling tool (jps) jps command which will display the daemons with its pid.It should list all 5 daemons 1.Namnode, 2.DataNode, 3.SecondaryNameNode 4.NodeManager 5. ResourceManger </para>
+			<programlisting>
+				jps
+			</programlisting>
+			<para>Console output:</para>
+			<programlisting>
+				11495 SecondaryNameNode
+				11653 ResourceManager
+				11260 NameNode
+				25361 NodeManager
+				25217 DataNode
+				26101 Jps
+			</programlisting>
+		</section>				
+	</section>
+	<section xml:id="examples-d1e12544">
+		<title>Running Example Program</title>
+		<para>Now hadoop cluster is up and running . Lets run a famous wordcount program on hadoop cluster. We have to create and upload some test input file for word count program in hdfs (/input) in this path.</para>
+		<para>Create a input folder and test file using the below commands.</para>
+		<para>Note: Execute these commands inside $HADOOP_HOME folder.</para>
+		<programlisting>
+			<![CDATA[
+			mkdir input && echo "This is word count example using hadoop 2.2.0" >> input/file
+			]]>
+		</programlisting>
+		<para>Upload the created folder to HDFS. On successfull execution you can able to see a folder contents on HDFS web ui (http://localhost:50070) under path /input/file .</para>
+		<programlisting>
+			bin/hadoop dfs -copyFromLocal input /input
+		</programlisting>
+		<para>Now run the word count program:</para>
+		<programlisting>
+			bin/hadoop dfs -copyFromLocal input /input
+		</programlisting>
+		<para>On successfull run the output of the wordcount result will be stored under the directory /output in HDFS and the result will be avilable in <emphasis> part-r-00000 </emphasis> file. <emphasis> _SUCCESS </emphasis> file indicates that successfull run of the job</para>		
+	</section>	
+	<section xml:id="debugging-d1e12545">
+		<title>Debugging</title>
+		<para>If your hadoop cluster fails to list all the daemons you can monitor the log files avialble at $HADOOP_HOME/logs directory.</para>
+		<programlisting>
+			ls -al logs
+		</programlisting>	
+	</section>	
+
+	<section xml:id="webui-d1e12546">
+		<title>Web UI</title>
+		<para>Acess the Hadoop components using the below URI.</para>
+		<programlisting>
+			Web UI for Hadoop NameNode: http://localhost:50070/
+			Web UI for Hadoop HDFS: http://localhost:50070/explorer.html
+			Web UI for Hadoop JobTracker: http://localhost:50030/
+			Web UI for Hadoop TaskTracker: http://localhost:50060/
+		</programlisting>	
+	</section>
+
+</section>
+</chapter>

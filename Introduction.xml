@@ -73,7 +73,7 @@
 <entry>A distributed file system that provides high-throughput access to application data.</entry>
 <entry>2.5.1</entry>
 <entry>
-	Pseudo-Distributed
+	<link linkend='Pseudo-Distributed-d1e12524'> Pseudo-Distributed </link>
 	Fully-Distributed
 </entry>
 </row>
@@ -82,7 +82,7 @@
 <entry>A framework for job scheduling and cluster resource management.</entry>
 <entry>2.5.1</entry>
 <entry>
-	Pseudo-Distributed
+	<link linkend='Pseudo-Distributed-d1e12524'> Pseudo-Distributed </link>
 	Fully-Distributed
 </entry>
 </row>
@@ -91,7 +91,7 @@
 <entry>A YARN-based system for parallel processing of large data sets.</entry>
 <entry>2.5.1</entry>
 <entry>
-	Pseudo-Distributed
+	<link linkend='Pseudo-Distributed-d1e12524'> Pseudo-Distributed </link>
 	Fully-Distributed
 </entry>
 </row>
@@ -134,5 +134,13 @@
 </tbody>
 </tgroup>
 </table>
+</section>
+<section xml:id="Notes-d1e1245">
+	<title>Assumptions on Environmental value</title>
+	<programlisting>
+		export JAVA_HOME=/opt/jdk1.7.0_55
+		export PATH=$PATH:$HOME/bin:$JAVA_HOME/bin
+		export HADOOP_HOME="$HOME/hadoop-2.5.1"
+	</programlisting>
 </section>
 </chapter>
