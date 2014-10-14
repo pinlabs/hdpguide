@@ -136,7 +136,7 @@
 </table>
 </section>
 <section xml:id="Notes-d1e1245">
-	<title>Assumptions on Environmental value</title>
+	<title>Assumptions on Environment variable</title>
 	<programlisting>
 		export JAVA_HOME=/opt/jdk1.7.0_55
 		export PATH=$PATH:$HOME/bin:$JAVA_HOME/bin
