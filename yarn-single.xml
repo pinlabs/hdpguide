@@ -58,9 +58,9 @@
 		<title>Get some tools</title>
 		<para>Before begin with installation let us update the Ubuntu packages with latest contents and get some tools for edition</para>
 		<programlisting>
-		sudo apt-get update
-		sudo apt-get install vim
-		cd
+		$ sudo apt-get update
+		$ sudo apt-get install vim
+		$ cd
 		</programlisting>	
 	</section>	
 	<section xml:id="jdk-d1e12532">
@@ -70,8 +70,8 @@
 		<title>Installing open-Jdk 1.7</title>
 		<para>For installing open-jdk 1.7 follow these steps</para>
 		<programlisting>
-		sudo apt-get install openjdk-7-jdk
-		vim .bashrc
+		$ sudo apt-get install openjdk-7-jdk
+		$ vim .bashrc
 		</programlisting>	
 		<para>Add this line at end of .bashrc file</para>
 		<programlisting>
@@ -80,18 +80,18 @@
 		</programlisting>
 		<para>Esc -> :wq for save and quit from vim editor</para>
 		<programlisting>
-		source .bashrc
-		java -version
+		$ source .bashrc
+		$ java -version
 		</programlisting>	
 		</section>	
 		<section xml:id="oracle-jdk-d1e12534">
 		<title>Installing oracle-Jdk 1.7</title>
 		<para>For installing oracle-jdk 1.7 follow these steps</para>
 		<programlisting>
-		wget https://dl.dropboxusercontent.com/u/24798834/Hadoop/jdk-7u51-linux-x64.tar.gz
-		tar xzf jdk-7u51-linux-x64.tar.gz
-		sudo mv jdk1.7.0_51 /opt/
-		vim .bashrc
+		$ wget https://dl.dropboxusercontent.com/u/24798834/Hadoop/jdk-7u51-linux-x64.tar.gz
+		$ tar xzf jdk-7u51-linux-x64.tar.gz
+		$ sudo mv jdk1.7.0_51 /opt/
+		$ vim .bashrc
 		</programlisting>	
 		<para>Add this line at end of .bashrc file</para>
 		<programlisting>
@@ -100,8 +100,8 @@
 		</programlisting>
 		<para>Esc -> :wq for save and quit from vim editor</para>
 		<programlisting>
-		source .bashrc
-		java -version
+		$ source .bashrc
+		$ java -version
 		</programlisting>	
 		<programlisting>
 			Console output :
@@ -116,19 +116,19 @@
 		<title>Setup passphraseless ssh</title>
 		<para>Setup password less ssh access for hadoop daemon </para>
 		<programlisting>
-		sudo apt-get install ssh
-		ssh-keygen -t rsa -P ""
-		ssh-copy-id -i ~/.ssh/id_rsa.pub localhost
-		exit
+		$ sudo apt-get install ssh
+		$ ssh-keygen -t rsa -P ""
+		$ ssh-copy-id -i ~/.ssh/id_rsa.pub localhost
+		$ exit
 		</programlisting>	
 	</section>	
 	<section xml:id="hadoop-d1e12536">
 		<title>Setting Hadoop Package</title>
 		<para>Download and install hadoop 2.5.1 package on home dir of ubuntu. </para>
 		<programlisting>
-		wget http://apache.cs.utah.edu/hadoop/common/stable/hadoop-2.5.1.tar.gz
-		tar xzf hadoop-2.5.1.tar.gz
-		cd hadoop-2.5.1/etc/hadoop
+		$ wget http://apache.cs.utah.edu/hadoop/common/stable/hadoop-2.5.1.tar.gz
+		$ tar xzf hadoop-2.5.1.tar.gz
+		$ cd hadoop-2.5.1/etc/hadoop
 		</programlisting>
 		<para>
 		Ensure that JAVA_HOME is set in hadoop-env.sh and points to the Java installation you intend to use. You can set other environment variables in hadoop-env.sh to suit your requirments. Some of the default settings refer to the variable HADOOP_HOME. The value of HADOOP_HOME is automatically inferred from the location of the startup scripts. HADOOP_HOME is the parent directory of the bin directory that holds the Hadoop scripts. In this instance it is $HADOOP_INSTALL/hadoop			
@@ -230,20 +230,20 @@
 		<title>Execution</title>
 		<para>Now all the configuration has be done next step is to formate the name node and to start the hadoop cluster. Frmate the name node using the below command available at $HADOOP_HOME directory.</para>
 		<programlisting>
-			bin/hadoop namenode -format
+			$ bin/hadoop namenode -format
 		</programlisting>	
 		<section xml:id="Start-d1e12542">
 			<title>Start the hadoop cluster</title>
 			<para>Start the hadoop cluster with the below command available ad $HADOOP_HOME directory.</para>
 			<programlisting>
-				sbin/start-all.sh
+			$ sbin/start-all.sh
 			</programlisting>
 		</section>	
 		<section xml:id="verify-d1e12543">
 			<title>Verify the hadoop cluster</title>
 			<para>After starting the hadoop cluster you can verify for the 5 hadoop daemons using the java profiling tool (jps) jps command which will display the daemons with its pid.It should list all 5 daemons 1.Namnode, 2.DataNode, 3.SecondaryNameNode 4.NodeManager 5. ResourceManger </para>
 			<programlisting>
-				jps
+				$ jps
 			</programlisting>
 			<para>Console output:</para>
 			<programlisting>
@@ -263,16 +263,16 @@
 		<para>Note: Execute these commands inside $HADOOP_HOME folder.</para>
 		<programlisting>
 			<![CDATA[
-			mkdir input && echo "This is word count example using hadoop 2.2.0" >> input/file
+			$ mkdir input && echo "This is word count example using hadoop 2.2.0" >> input/file
 			]]>
 		</programlisting>
 		<para>Upload the created folder to HDFS. On successfull execution you can able to see a folder contents on HDFS web ui (http://localhost:50070) under path /input/file .</para>
 		<programlisting>
-			bin/hadoop dfs -copyFromLocal input /input
+			$ bin/hadoop dfs -copyFromLocal input /input
 		</programlisting>
 		<para>Now run the word count program:</para>
 		<programlisting>
-			bin/hadoop dfs -copyFromLocal input /input
+			$ bin/hadoop dfs -copyFromLocal input /input
 		</programlisting>
 		<para>On successfull run the output of the wordcount result will be stored under the directory /output in HDFS and the result will be avilable in <emphasis> part-r-00000 </emphasis> file. <emphasis> _SUCCESS </emphasis> file indicates that successfull run of the job</para>		
 	</section>	
@@ -280,7 +280,7 @@
 		<title>Debugging</title>
 		<para>If your hadoop cluster fails to list all the daemons you can monitor the log files avialble at $HADOOP_HOME/logs directory.</para>
 		<programlisting>
-			ls -al logs
+			$ ls -al logs
 		</programlisting>	
 	</section>	
 

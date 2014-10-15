@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xmlns:db="http://docbook.org/ns/docbook" xmlns="http://docbook.org/ns/docbook" xml:id="Yarn_Single-d1e1250" version="5.0" xml:base="Yarn_Single.xml">
+<title>Apache HBase Installation</title>
+
+<section xml:id="Hbase_Single-d1e1261">
+<title>Supported Modes</title>
+<para>Apache HBase cluster can be installed in one of the three supported modes </para>
+	<itemizedlist mark='opencircle'>
+	<listitem>
+	<para>
+	<command>Local (Standalone) Mode</command> -  Hadoop is configured to run against the local filesystem. This is not an appropriate configuration for a production instance of HBase. This is useful for experimenting with HBase. you can insert rows into the table, perform put and scan operations against the table, enable or disable the table, and start and stop HBase using hbase shell CLI.
+	</para>
+	</listitem>
+	<listitem >
+	<para>
+	<command>Pseudo-Distributed Mode</command> - Pseudo-Distributed mode where each Hbase daemon (HMaster, HRegionServer, and Zookeeper) runs in a separate Java process,but on single host.
+	</para>
+	</listitem>
+	<listitem>
+	<para>
+	<command>Fully-Distributed Mode</command> - Master, Slave cluster setup where daemons runs on seperate machines.In a distributed configuration, the cluster contains multiple nodes, each of which runs one or more HBase daemon. These include primary and backup Master instances, multiple Zookeeper nodes, and multiple RegionServer nodes.fully-distributed uses real-world scenarios.
+	</para>
+	</listitem>
+	</itemizedlist>
+
+	<section xml:id="requirments-d1e12562">
+		<title>Requirements</title>
+		<para>HBase requires that a JDK be installed.See JDK installation section for <link linkend='oracle-jdk-d1e12534'> Oracle JDK</link> or <link linkend='open-jdk-d1e12533'>Open JDK</link> Installation</para>	
+	</section>
+
+</section>
+</chapter>
