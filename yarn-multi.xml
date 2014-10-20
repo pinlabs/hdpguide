@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xmlns:db="http://docbook.org/ns/docbook" xmlns="http://docbook.org/ns/docbook" xml:id="Yarn_multi-d1e1260" version="5.0" xml:base="yarn_multi.xml">
+<title>Apache YARN Fully-Distributed Mode</title>
+
+<section xml:id="Fully-Distributed-d1e12564">
+<title>Fully-Distributed Mode</title>
+<para>Yarn fully-distributed mode is Master, Slave cluster setup where daemons runs on seperate machines. In this book we take two node cluster setup and going to implement hadoop cluster on 3 machines where 1 machine will act as Master Node and another two machines will act as slave nodes. Below table view describes about the machine configurations.</para>
+
+<table xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg" xmlns:html="http://www.w3.org/1999/xhtml" frame="all">
+<title>Two Node Cluster Setup</title>
+<tgroup cols="3">
+<thead>
+<row>
+<entry>Name</entry>
+<entry>Machine</entry>
+<entry>Roles</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry>MasterNode</entry>
+<entry>ubuntu 14.04 LTS</entry>
+<entry>Name Node,Secondary NameNode,ResourceManager</entry>
+</row>
+<row>
+<entry>SlaveNode1</entry>
+<entry>ubuntu 14.04 LTS</entry>
+<entry>DataNode,NodeManager</entry>
+</row>
+<row>
+<entry>SlaveNode2</entry>
+<entry>ubuntu 14.04 LTS</entry>
+<entry>DataNode,NodeManager</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<section xml:id="Requirments-d1e1265">
+	<title>Requirements for Fully-Distributed Mode</title>
+	<itemizedlist>	
+	<listitem>
+	<para>
+	Ubuntu Server 14.04
+	</para>
+	</listitem>
+	<listitem >
+	<para>
+	Jdk 1.7
+	</para>
+	</listitem>
+	<listitem>
+	<para>
+	Apache Hadoop-2.5.1 Package 
+	</para>
+	</listitem>
+	<listitem>
+	<para>
+	ssh-server
+	</para>
+	</listitem>	
+	</itemizedlist>	
+</section>
+
+<section xml:id="installation-d1e1266">
+	<title>Installation Notes</title>
+	1. Setup some tools on all 3 machines - for setting up required tools refer <link linkend='tools-d1e12531'>this </link> Document.
+	2. Next install jdk on all 3 machines - for setting up JDK refer <link linkend='jdk-d1e12532'>this </link> Document.
+
+	<section xml:id="hadoop-d1e12567">
+		<title>Setting Hadoop Package ( for all machines)</title>
+		<para>Download and install hadoop 2.5.1 package on home dir of ubuntu on all machines (ie. Master node , Slave Node1,Slave Node2).</para>
+
+		<programlisting>
+		$ wget http://apache.cs.utah.edu/hadoop/common/stable/hadoop-2.5.1.tar.gz
+		$ tar xzf hadoop-2.5.1.tar.gz
+		$ cd hadoop-2.5.1/etc/hadoop
+		</programlisting>
+
+		<para>
+		Ensure that JAVA_HOME is set in hadoop-env.sh and points to the Java installation you intend to use. You can set other environment variables in hadoop-env.sh to suit your requirments. Some of the default settings refer to the variable HADOOP_HOME. The value of HADOOP_HOME is automatically inferred from the location of the startup scripts. HADOOP_HOME is the parent directory of the bin directory that holds the Hadoop scripts. In this instance it is $HADOOP_INSTALL/hadoop			
+		</para>	
+		<para>Configure JAVA_HOME in <command>hadoop-env.sh</command> file by uncommenting the line <emphasis> export JAVA_HOME= </emphasis>and replace with below contents for open-jdk</para>
+		<programlisting>
+		export JAVA_HOME=/usr
+		</programlisting>		
+		<para>Configure JAVA_HOME in <command>hadoop-env.sh</command> file by uncommenting the line <emphasis> export JAVA_HOME= </emphasis>and replace with below contents for oracle-jdk</para>
+		<programlisting>
+		export JAVA_HOME=/opt/jdk1.7.0_51
+		</programlisting>			
+	</section>	
+
+	<section xml:id="core-site-d1e12568">
+		<title>Configuring core-site.xml</title>
+		<para>etc/hadoop/core-site.xml:</para>
+		<para>Edit core-site.xml available in ($HADOOP_HOME/etc/hadoop/core-site.xml) with the contents below.</para>
+		<programlisting>
+			<![CDATA[
+			<?xml version="1.0" encoding="UTF-8"?>
+			<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+			<configuration>
+			 <property>
+			 <name>fs.default.name</name>
+			 <value>hdfs://<Master host Name>:9000</value>
+			 </property>
+			</configuration>
+			]]>
+		</programlisting>			
+	</section>	
+	<section xml:id="hdfs-site-d1e12569">
+		<title>Configuring hdfs-site.xml</title>
+		<para>etc/hadoop/hdfs-site.xml:</para>
+		<para>Edit hdfs-site.xml available in ($HADOOP_HOME/etc/hadoop/hdfs-site.xml) with the contents below.</para>
+		<programlisting>
+			<![CDATA[
+			<?xml version="1.0" encoding="UTF-8"?>
+			<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+			<configuration>
+			 <property>
+			   <name>dfs.replication</name>
+			   <value>3</value>
+			 </property>
+			 <property>
+			   <name>dfs.namenode.name.dir</name>
+			   <value>/home/ubuntu/yarn/yarn_data/hdfs/namenode</value>
+			 </property>
+			 <property>
+			   <name>dfs.datanode.data.dir</name>
+			   <value>/home/ubuntu/yarn/yarn_data/hdfs/datanode</value>
+			 </property>
+			</configuration>
+			]]>
+		</programlisting>	
+		<para>Where <emphasis> ubuntu </emphasis> is current user. <emphasis>dfs.replication</emphasis> represents the data replication factor (by default 3) since its single node it has be set as 1. <emphasis>dfs.namenode.name.dir</emphasis> attribute defines the local directory for storing the name node data. <emphasis>dfs.datanode.data.dir</emphasis> attribute defines the local directory for storing the data node data (ie. actual user data).</para>		
+	</section>	
+	<section xml:id="mapred-site-d1e12570">
+		<title>Configuring mapred-site.xml</title>
+		<para>etc/hadoop/mapred-site.xml:</para>
+		<para>Edit mapred-site.xml available in ($HADOOP_HOME/etc/hadoop/mapred-site.xml) with the contents below.</para>
+		<programlisting>
+			<![CDATA[
+			<?xml version="1.0" encoding="UTF-8"?>
+			<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+			<configuration>
+			 <property>
+			 <name>mapreduce.framework.name</name>
+			 <value>yarn</value>
+			 </property>
+			</configuration>
+			]]>
+		</programlisting>
+		<para>Where <emphasis> mapreduce.framework.name </emphasis> specifies the Mapreduce Version to be used MR1 or MR2(YARN).</para>		
+	</section>	
+	<section xml:id="yarn-site-d1e12571">
+		<title>Configuring yarn-site.xml</title>
+		<para>etc/hadoop/yarn-site.xml:</para>
+		<para>Edit yarn-site.xml available in ($HADOOP_HOME/etc/hadoop/yarn-site.xml) with the contents below.</para>
+		<programlisting>
+			<![CDATA[
+			<?xml version="1.0" encoding="UTF-8"?>
+			<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+			<configuration>
+			<property>
+			   <name>yarn.nodemanager.aux-services</name>
+			   <value>mapreduce_shuffle</value>
+			</property>
+			<property>
+			   <name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>
+			   <value>org.apache.hadoop.mapred.ShuffleHandler</value>
+			</property>
+			<property>
+			<name>yarn.resourcemanager.resource-tracker.address</name>
+			<value><master hostname>:8025</value>
+			</property>
+			<property>
+			<name>yarn.resourcemanager.scheduler.address</name>
+			<value><master hostname>:8030</value>
+			</property>
+			<property>
+			<name>yarn.resourcemanager.address</name>
+			<value><master hostname>:8040</value>
+			</property>			
+			</configuration>
+			]]>
+		</programlisting>			
+	</section>	
+</section>
+
+<section xml:id="ssh-d1e12572">
+	<title>Add slave Node details ( for all machines)</title>
+	<para>After configuring the hadoop config files . Now we have to add list of slave machines on slaves file located in $HADOOP_HOME/etc/hadoop directory. Edit the file and remove localhost entry and append the lines with the fillowing contents. Kindly replace appropiate ip address with your data center address.</para>
+	<programlisting>
+		<![CDATA[
+		<slavenode1 private ip>
+		<slavenode2 private ip>	
+		]]>	
+	</programlisting>
+</section>	
+
+<section xml:id="ssh-d1e12573">
+	<title>Edit /etc/hosts entry ( for all machines)</title>
+	<para>Now we have to add routing of all machine details on /etc/hosts entry with the following entry. Kindly replace appropiate ip address with your data center address. Change this entry on all machines</para>
+	<programlisting>
+		<![CDATA[
+		<masternode private ip>       <master hostname>
+		<slavenode1 private ip>        <slave1 hostname>
+		<slavenode1 private ip>        <slave2 hostname>	
+		]]>
+	</programlisting>
+	<para>Important Note: please comment 127.0.1.1 entry in etc/hosts file</para>
+</section>	
+
+<section xml:id="ssh-d1e12574">
+	<title>Setup passphraseless ssh</title>
+	<para>Setup password less ssh on Master to access slave machines</para>
+	<programlisting>
+		<![CDATA[
+	$ sudo apt-get install ssh
+	$ ssh-keygen -t rsa -P ""
+	$ ssh-copy-id -i ~/.ssh/id_rsa.pub localhost
+	$ ssh-copy-id -i ~/.ssh/id_rsa.pub <slave1 ip>
+	$ ssh-copy-id -i ~/.ssh/id_rsa.pub <slave2 ip>
+	$ ssh localhost 
+	$ exit
+	$ ssh <slave1 ip> 
+	$ exit		
+	$ ssh <slave2 ip> 
+	$ exit		
+	]]>
+	</programlisting>
+	<para>Make sure that you are able to login to all the slaves without password.</para>	
+</section>	
+
+	<section xml:id="Execution-d1e12575">
+		<title>Execution (on Master Node)</title>
+		<para>Now all the configuration has be done next step is to format the name node and to start the hadoop cluster. format the name node using the below command available at $HADOOP_HOME directory. Execution is done on Master Node</para>
+		<programlisting>
+			$ bin/hadoop namenode -format
+		</programlisting>	
+		<section xml:id="Start-d1e12576">
+			<title>Start the hadoop cluster</title>
+			<para>Start the hadoop cluster with the below command available ad $HADOOP_HOME directory.</para>
+			<programlisting>
+			$ sbin/start-all.sh
+			</programlisting>
+		</section>	
+		<section xml:id="verify-d1e12577">
+			<title>Verify the hadoop cluster</title>
+			<para>After starting the hadoop cluster you can verify for the 5 hadoop daemons using the java profiling tool (jps) jps command which will display the daemons with its pid.It should list appropiate daemons on various machine . check below table for verifying which daemons runs on which machine</para>
+			<programlisting>
+				$ jps
+			</programlisting>
+			<para>Console output:</para>
+				<table xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg" xmlns:html="http://www.w3.org/1999/xhtml" frame="all">
+				<title>Daemons List for two node cluster</title>
+				<tgroup cols="3">
+				<thead>
+				<row>
+				<entry>Name</entry>
+				<entry>Machine</entry>
+				<entry>Roles</entry>
+				</row>
+				</thead>
+				<tbody>
+				<row>
+				<entry>MasterNode</entry>
+				<entry>ubuntu 14.04 LTS</entry>
+				<entry>Name Node,Secondary NameNode,ResourceManager</entry>
+				</row>
+				<row>
+				<entry>SlaveNode1</entry>
+				<entry>ubuntu 14.04 LTS</entry>
+				<entry>DataNode,NodeManager</entry>
+				</row>
+				<row>
+				<entry>SlaveNode2</entry>
+				<entry>ubuntu 14.04 LTS</entry>
+				<entry>DataNode,NodeManager</entry>
+				</row>
+				</tbody>
+				</tgroup>
+				</table>			
+		</section>				
+	</section>
+
+	<section xml:id="examples-d1e12578">
+		<title>Running Example Program</title>
+		<para>Now hadoop cluster is up and running . Lets run a famous wordcount program on hadoop cluster. We have to create and upload some test input file for word count program in hdfs (/input) in this path. Execute all these commands on master machine.</para>
+		<para>Create a input folder and test file using the below commands.</para>
+		<para>Note: Execute these commands inside $HADOOP_HOME folder.</para>
+		<programlisting>
+			<![CDATA[
+			$ mkdir input && echo "This is word count example using hadoop 2.2.0" >> input/file
+			]]>
+		</programlisting>
+		<para>Upload the created folder to HDFS. On successfull execution you can able to see a folder contents on HDFS web ui (http://localhost:50070) under path /input/file .</para>
+		<programlisting>
+			$ bin/hadoop dfs -copyFromLocal input /input
+		</programlisting>
+		<para>Now run the word count program:</para>
+		<programlisting>
+			$ bin/hadoop dfs -copyFromLocal input /input
+		</programlisting>
+		<para>On successfull run the output of the wordcount result will be stored under the directory /output in HDFS and the result will be avilable in <emphasis> part-r-00000 </emphasis> file. <emphasis> _SUCCESS </emphasis> file indicates that successfull run of the job</para>		
+	</section>	
+	<section xml:id="debugging-d1e12579">
+		<title>Debugging</title>
+		<para>If your hadoop cluster fails to list all the daemons you can monitor the log files avialble at $HADOOP_HOME/logs directory.</para>
+		<programlisting>
+			$ ls -al logs
+		</programlisting>	
+	</section>	
+
+	<section xml:id="webui-d1e12580">
+		<title>Web UI</title>
+		<para>Acess the Hadoop components using the below URI.</para>
+		<programlisting>
+			<![CDATA[
+			Web UI for Hadoop NameNode: http://<masternode ip>:50070/
+			Web UI for Hadoop HDFS: http://<masternode ip>:50070/explorer.html
+			Web UI for Hadoop JobTracker: http://<masternode ip>:50030/
+			Web UI for Hadoop TaskTracker: http://<masternode ip>:50060/
+			]]>
+		</programlisting>	
+	</section>
+
+</section>
+</chapter>

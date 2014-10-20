@@ -32,5 +32,6 @@
   </info>
 <xi:include href="Introduction.xml" />
 <xi:include href="yarn-single.xml"/>
+<xi:include href="yarn-multi.xml"/>
 <xi:include href="hbase-standalone.xml"/>
 </book>
