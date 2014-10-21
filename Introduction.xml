@@ -99,7 +99,11 @@
 <entry>Apache HBase</entry>
 <entry>A scalable, distributed database that supports structured data storage for large tables.</entry>
 <entry></entry>
-<entry>Single Node</entry>
+<entry>
+	<link linkend='Pseudo-Distributed-d1e12588'> Standalone </link>
+	<link linkend='Pseudo-Distributed-d1e12589'> Pseudo-Distributed </link>
+	<link linkend='Fully-Distributed-d1e12590'> Fully-Distributed </link>
+</entry>
 </row>
 <row>
 <entry>Apache Hive</entry>
