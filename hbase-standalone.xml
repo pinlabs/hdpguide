@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter xmlns:db="http://docbook.org/ns/docbook" xmlns="http://docbook.org/ns/docbook" xml:id="Yarn_Single-d1e1250" version="5.0" xml:base="Yarn_Single.xml">
+<chapter xmlns:db="http://docbook.org/ns/docbook" xmlns="http://docbook.org/ns/docbook" xml:id="hbase_Single-d1e1260" version="5.0" xml:base="hbase_Single.xml">
 <title>Apache HBase Installation</title>
 
 <section xml:id="Hbase_Single-d1e1261">

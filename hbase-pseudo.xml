@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter xmlns:db="http://docbook.org/ns/docbook" xmlns="http://docbook.org/ns/docbook" xml:id="Yarn_Single-d1e1250" version="5.0" xml:base="Yarn_Single.xml">
-<title>Apache HBase Installation</title>
+<chapter xmlns:db="http://docbook.org/ns/docbook" xmlns="http://docbook.org/ns/docbook" xml:id="habse-pseudo-d1e1270" version="5.0" xml:base="hbase_psedo.xml">
+<title>Pseudo-Distributed Mode Installation</title>
 
-	<section xml:id="requirments-d1e12564">
+	<section xml:id="requirments-d1e12571">
 		<title>Requirements</title>
 		<para>HBase requires that a JDK and hadoop be installed.See JDK installation section for <link linkend='oracle-jdk-d1e12534'> Oracle JDK</link> or <link linkend='open-jdk-d1e12533'>Open JDK</link> Installation. See Hadoop installation section for <link linkend='oracle-jdk-d1e12534'> Oracle JDK</link> or <link linkend='Pseudo-Distributed-d1e12524'>Open JDK</link> Installation.	</para>
 	</section>
 
-	<section xml:id="Pseudo-Distributed-d1e12565">
+	<section xml:id="Pseudo-Distributed-d1e12572">
 		<title>Pseudo-Distributed Mode</title>
 		<para>Pseudo-Distributed mode of installation uses HDFS file system for storing hbase data.Pseudo-Distributed mode is not suitable for production. It is met for development and testing purpose in single machine.</para>
 
