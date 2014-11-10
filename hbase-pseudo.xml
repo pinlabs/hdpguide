@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter xmlns:db="http://docbook.org/ns/docbook" xmlns="http://docbook.org/ns/docbook" xml:id="Yarn_Single-d1e1250" version="5.0" xml:base="Yarn_Single.xml">
+<title>Apache HBase Installation</title>
+
+	<section xml:id="requirments-d1e12564">
+		<title>Requirements</title>
+		<para>HBase requires that a JDK and hadoop be installed.See JDK installation section for <link linkend='oracle-jdk-d1e12534'> Oracle JDK</link> or <link linkend='open-jdk-d1e12533'>Open JDK</link> Installation. See Hadoop installation section for <link linkend='oracle-jdk-d1e12534'> Oracle JDK</link> or <link linkend='Pseudo-Distributed-d1e12524'>Open JDK</link> Installation.	</para>
+	</section>
+
+	<section xml:id="Pseudo-Distributed-d1e12565">
+		<title>Pseudo-Distributed Mode</title>
+		<para>Pseudo-Distributed mode of installation uses HDFS file system for storing hbase data.Pseudo-Distributed mode is not suitable for production. It is met for development and testing purpose in single machine.</para>
+
+		<bridgehead>Loopback IP - HBase 0.94.x and earlier </bridgehead>
+		<para>Prior to HBase 0.94.x, HBase expected the loopback IP address to be 127.0.0.1. Ubuntu and some other distributions default to 127.0.1.1 and this will cause problems for you.</para>
+		<bridgehead>Example /etc/hosts file looks like this </bridgehead>
+		<programlisting>
+		127.0.0.1	localhost
+		127.0.0.1	mydell		
+		</programlisting>
+
+		<bridgehead>Get Started with Hbase</bridgehead>
+		<para>Choose a download site from this list of Apache Download Mirrors. Click on the suggested top link. This will take you to a mirror of HBase Releases. Click on the folder named stable and then download the binary file that ends in .tar.gz to your local filesystem. Be sure to choose the version that corresponds with the version of Hadoop you are likely to use later. In most cases, you should choose the file for Hadoop 2, which will be called something like hbase-0.98.3-hadoop2-bin.tar.gz. Do not download the file ending in src.tar.gz for now.</para>	
+
+		<bridgehead>Extract HBase Package</bridgehead>
+		<programlisting>
+		$ tar xzf hbase-0.98.3-hadoop1.tar.gz
+		$ cd hbase-0.98.3-hadoop1	
+		</programlisting>		
+		
+		<bridgehead>Set JAVA_HOME in conf/hbase-env.sh</bridgehead>
+		<programlisting>
+		$ vim conf/hbase-env.sh
+		</programlisting>
+		<para>
+			uncomment JAVA_HOME entry in conf/hbase-env.sh and point you jdk location as /opt/jdk1.7.0_51
+			Example:
+		<programlisting>
+		 export JAVA_HOME=/opt/jdk1.7.0_51
+		</programlisting>			
+		</para>		
+		<bridgehead>Edit conf/hbase-site.xml</bridgehead>
+		<para>Edit conf/hbase-site.xml and add entry for zookeeper data directory and data directory for hbase. replace the contents with the below contents.In this case we use HDFS for HBase storage and we going to run region server and zookeeper as seperate daemons.</para>
+		<programlisting>
+			<![CDATA[
+			<?xml version="1.0" encoding="UTF-8"?>
+			<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>			
+			<configuration>
+			  <property>
+			    <name>hbase.rootdir</name>
+			    <value>hdfs://localhost:9000/hbase</value>
+			  </property>
+			  <property>
+			    <name>hbase.zookeeper.property.dataDir</name>
+			    <value>/home/ubuntu/yarn/zookeeper</value>
+			  </property>
+			<property>
+			  <name>hbase.zookeeper.quorum</name>
+			  <value>localhost</value>
+			</property>
+			<property>
+			  <name>hbase.cluster.distributed</name>
+			  <value>true</value>
+			</property>
+			</configuration>              
+            ]]>
+		</programlisting>			
+		<bridgehead>Start HBase</bridgehead>
+		<para>Start Hbase by runninng shell script available in bin/start-hbase.sh.after you started jps command should give the list of java process responsible for hbase (HMaster,HRegionServer,HQuorumPeer).</para>
+		<programlisting>
+			$ bin/start-hbase.sh
+		</programlisting>
+		<programlisting>
+			5605 HMaster
+			5826 Jps
+			5003 JobTracker
+			5545 HQuorumPeer
+			4756 DataNode
+			5728 HRegionServer
+			4546 NameNode
+			5157 TaskTracker
+			4907 SecondaryNameNode
+		</programlisting>				
+
+		<bridgehead>Get started with HBase Shell</bridgehead>
+		<para>After installing HBase now its time to get started with HBase shell.Lets fire up Hbase shell using command bin/hbase shell command.</para>
+		<programlisting>
+			$ bin/hbase shell
+		</programlisting>	
+		<bridgehead>Create a table</bridgehead>
+		<para>Use create command to create table.you must specify table name and column family as argument for Create command.</para>
+		<programlisting>
+			hbase> create 'test', 'cf'    
+			0 row(s) in 1.2200 seconds
+		</programlisting>	
+
+		<bridgehead>List tables</bridgehead>
+		<para>Use list command to list all tables in hbase.</para>
+		<programlisting>
+			hbase> list 'test'    
+			TABLE
+			test
+			1 row(s) in 0.0350 seconds
+
+			=> ["test"]
+		</programlisting>	
+
+		<bridgehead>Insert data in to table</bridgehead>
+		<para>Use put command to insert data into table in hbase.</para>
+		<programlisting>
+			hbase> put 'test', 'row1', 'cf:a', 'value1'
+			0 row(s) in 0.1770 seconds
+
+			hbase> put 'test', 'row2', 'cf:b', 'value2'
+			0 row(s) in 0.0160 seconds
+
+			hbase> put 'test', 'row3', 'cf:c', 'value3'
+			0 row(s) in 0.0260 seconds      
+		</programlisting>	
+
+		<bridgehead>Scan the table for all data at once.</bridgehead>
+		<para>Use Scan command to list all contents of a table in hbase.</para>
+		<programlisting>
+			hbase> scan 'test'
+			ROW                   COLUMN+CELL
+			 row1                 column=cf:a, timestamp=1403759475114, value=value1
+			 row2                 column=cf:b, timestamp=1403759492807, value=value2
+			 row3                 column=cf:c, timestamp=1403759503155, value=value3
+			3 row(s) in 0.0440 seconds    
+		</programlisting>		
+
+		<bridgehead>Get Particular row of data</bridgehead>
+		<para>Use get command to single row from a table in hbase.</para>
+		<programlisting>
+			hbase> get 'test', 'row1'
+			COLUMN                CELL
+			 cf:a                 timestamp=1403759475114, value=value1
+			1 row(s) in 0.0230 seconds     
+		</programlisting>	
+
+		<bridgehead>Delete a table </bridgehead>
+		<para>To delete a table in hbase you have to first disable the table then only you can able to delete the table. use disable command to disable the table and enable command to enable the table.drop command to drop the table</para>
+		<programlisting>
+			hbase> disable 'test'
+			0 row(s) in 1.6270 seconds    	
+			hbase> drop 'test'
+			0 row(s) in 0.2900 seconds   				
+		</programlisting>		
+
+		<bridgehead>Exit from HBase Shell </bridgehead>
+		<para>use quit command to exit from hbase shell.</para>
+		<programlisting>
+			hbase> quit  				
+		</programlisting>	
+
+		<bridgehead>Stopping HBase </bridgehead>
+		<para>For stopping HBase use bin/stop-hbase.sh shell script in bin folder.</para>
+		<programlisting>
+			$ ./bin/stop-hbase.sh
+			stopping hbase....................			
+		</programlisting>										
+
+	</section>	
+
+</section>
+</chapter>
